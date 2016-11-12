@@ -30,8 +30,8 @@ public class MiniTwitter {
 	private JTextField userID;
 	private JTextField groupID;
 	private JTree tree;
-	private ArrayList<User> users = new ArrayList();
 	private ArrayList<User> group = new ArrayList();
+	UserList ul = new UserList();
 
 
 
@@ -84,7 +84,8 @@ public class MiniTwitter {
 
 				model.insertNodeInto(newNode, selectedNode, selectedNode.getChildCount());
 				User u = new User(userID.getText());
-				users.add(u);
+
+				ul.addUser(u);
 				model.reload();
 				
 			}
@@ -123,21 +124,10 @@ public class MiniTwitter {
 			public void actionPerformed(ActionEvent e) {
 				DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 				String selectedNodeName = selectedNode.toString();
-				User u;
-				int i = users.size(), j = 0;
-				while(i < j){
-					u = users.get(j);
-					if(u.getName().compareTo(selectedNodeName) == 0){
-						break;
-					}
-					else{
-						j++;
-					}
-				}
-				u = users.get(j);
+				User u = ul.getUserName(selectedNodeName);
 				UserView openView = new UserView();
-				openView.setUserList(users);
 				openView.setUser(u);
+				openView.setUserList(ul);
 				openView.run();
 				
 			}

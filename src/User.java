@@ -1,22 +1,30 @@
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class User implements Observer{
 	
 	private String name;
-	private List<User> followers;
-	private List<User> following;
-	private List<String> messages;
+	private ArrayList<User> followers;
+	private ArrayList<User> following;
+	private ArrayList<String> messages;
 	
 	public User(String n){
 		name = n;
-		followers = new ArrayList();
-		messages  = new ArrayList();
+		messages = new ArrayList<String>();
+
+	}
+	public void test(){
+		if(following.isEmpty()){
+			System.out.println("Empty");
+		}
 	}
 	
 	public String getName(){
 		return name;
+	}
+	public void addFollowing(User u){
+		following.add(u);
 	}
 	
 	public void addFollower(User u){
@@ -24,17 +32,34 @@ public class User implements Observer{
 	}
 	
 	public void addMessage(String s){
+		System.out.println("Works so far");
+		if(messages == null){
+			messages = new ArrayList<String>();
+		}
 		messages.add(s);
 	}
 	
-	public List<User> getFollowers(){
+	public ArrayList<User> getFollowers(){
 
-		return followers;
+		return new ArrayList<User>(following);
 	}
 	
-	public List<String> getMessages(){
+	public ArrayList<String> getMessages(){
 
-		return messages;
+		if(messages == null){
+			return new ArrayList<String>();
+		}
+		
+		else
+			return messages;
+	}
+	
+	public boolean checkFollowers(){
+		if(following.get(0) == null){
+			return false;
+		}
+		else
+			return true;
 	}
 	
 	@Override

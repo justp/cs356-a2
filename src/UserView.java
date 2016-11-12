@@ -7,17 +7,19 @@ import javax.swing.JTextField;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class UserView implements Observable{
+public class UserView{
 
 	private JFrame frame;
 	private JTextField follow;
 	private JTextField message;
-	private User user = new User("");
+	private User user;
+	private UserList ul;
 	DefaultListModel listModel = new DefaultListModel();
 	DefaultListModel newModel = new DefaultListModel();
-	private ArrayList<User> ul = new ArrayList();
-
+	//private ArrayList<User> ul = new ArrayList();
 
 	public void run() {
 		try {
@@ -34,10 +36,7 @@ public class UserView implements Observable{
 	public UserView() {
 		initialize();
 	}
-
-	/**
-	 * Initialize the contents of the frame..
-	 */
+	
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 300, 300);
@@ -50,22 +49,22 @@ public class UserView implements Observable{
 		follow.setColumns(10);
 		
 		JButton followButton = new JButton("Follow User");
+		followButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String s = follow.getText();
+				User x = ul.getUserName(s);
+				user.addFollower(x);
+			}
+		});
 		followButton.setBounds(185, 10, 89, 23);
 		frame.getContentPane().add(followButton);
-		String s = follow.getText();
-		User x = new User("");
-		for(int i = 0; i < ul.size(); i++){
-			if(ul.get(i).getName().compareTo(s) == 0){
-				x = ul.get(i);
-			}
-		}
-		user.addFollower(x);
+		
 		
 		JList currentFollowers = new JList(listModel);
 		currentFollowers.setBounds(38, 42, 213, 79);
 		frame.getContentPane().add(currentFollowers);
-		List<User> l = new ArrayList<>();
-		l = user.getFollowers();
+		ArrayList<User> l = new ArrayList();
+		
 		listModel.addElement("Current Followers");
 		for(int i = 0; i < l.size(); i++){
 			listModel.addElement(l.get(i).getName());
@@ -77,17 +76,22 @@ public class UserView implements Observable{
 		message.setColumns(10);
 		
 		JButton postTweet = new JButton("Post Tweet");
+		postTweet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String p = follow.getText();
+				user.addMessage(p);
+			}
+		});
 		postTweet.setBounds(185, 132, 89, 23);
 		frame.getContentPane().add(postTweet);
-		String p = follow.getText();
-		user.addMessage(p);
+		
 		
 		
 		JList newFeed = new JList(newModel);
 		newFeed.setBounds(20, 164, 254, 86);
 		frame.getContentPane().add(newFeed);
 		List<String> m = new ArrayList<>();
-		m = user.getMessages();
+		//m = user.getMessages();
 		newModel.addElement("News Feed");
 		for(int i = 0; i < l.size(); i++){
 			listModel.addElement(m.get(i));
@@ -98,20 +102,8 @@ public class UserView implements Observable{
 	public void setUser(User u){
 		user = u;
 	}
-	
-	public void setUserList(ArrayList<User> u){
-		ul = u;
+	public void setUserList(UserList l){
+		ul = l;
 	}
 
-	@Override
-	public void addFollower(Observer o) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addMessage(Observer o) {
-		// TODO Auto-generated method stub
-		
-	}
 }
